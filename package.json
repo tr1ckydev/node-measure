@@ -1,0 +1,32 @@
+{
+  "name": "node-measure",
+  "version": "1.0.0",
+  "description": "A far better replacement for console.time along with other cool features.",
+  "main": "dist/index.js",
+  "scripts": {
+    "compile": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tr1ckydev/node-measure.git"
+  },
+  "keywords": [
+    "performance",
+    "timer",
+    "tester",
+    "measure",
+    "node-measure"
+  ],
+  "files": [
+    "dist/*"
+  ],
+  "author": "tr1ckydev",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tr1ckydev/node-measure/issues"
+  },
+  "homepage": "https://github.com/tr1ckydev/node-measure#readme",
+  "devDependencies": {
+    "@types/node": "^16.10.1"
+  }
+}
