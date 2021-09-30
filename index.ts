@@ -1,23 +1,33 @@
-import { Timer } from './timer.js';
+import { hrtime } from 'process';
 
 interface MeasureAverage {
     avgTimeTaken: number | string,
     tests: (number | string)[]
 }
 
+class Timer {
+    private i: bigint = BigInt(0);
+    start(): void { this.i = hrtime.bigint(); }
+    stop(): bigint { return hrtime.bigint() - this.i; }
+}
+
 export class Measure {
     private delay = BigInt(0);
     private timers: Map<string, Timer> = new Map();
     constructor() {
-        let total = BigInt(0);
         const t = new Timer();
-        let i = 4;
+        const tests: bigint[] = [];
+        let total = BigInt(0);
+        let i = 6;
         while (i !== 0) {
             t.start();
-            total += t.stop();
+            const diff = t.stop();
+            tests.push(diff);
+            total += diff;
             i--;
         }
-        this.delay = (total / BigInt(5));
+        total -= tests.shift()!;
+        this.delay = total / BigInt(6);
     }
     /**
      * Starts a timer with the `label` provided.
@@ -59,7 +69,9 @@ export class Measure {
         const t = new Timer();
         t.start();
         await callback();
-        const diff = Number(t.stop() - this.delay);
+        const end = t.stop()
+        console.log(this.delay);
+        const diff = Number(end - this.delay);
         return simplified ? simplify(diff) : diff;
     }
     /**
@@ -72,17 +84,19 @@ export class Measure {
     async measureAvg(iterations: number, callback: Function, simplified = true): Promise<MeasureAverage> {
         const tests: (number | string)[] = [];
         let total = 0;
-        let i = iterations;
+        let i = iterations + 1;
         while (i !== 0) {
             const test = await this.measure(callback, false) as number;
-            tests.push(simplified ? simplify(test) : test);
-            total += test;
+            if (i !== iterations + 1) {
+                tests.push(simplified ? simplify(test) : test);
+                total += test;
+            }
             i--;
         }
         return {
             avgTimeTaken: simplified
                 ? simplify(total / iterations)
-                : (total / iterations).toFixed(6),
+                : +(total / iterations).toFixed(6),
             tests
         };
     }
