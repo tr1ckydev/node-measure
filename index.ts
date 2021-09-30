@@ -16,17 +16,14 @@ export class Measure {
     private timers: Map<string, Timer> = new Map();
     constructor() {
         const t = new Timer();
-        const tests: bigint[] = [];
         let total = BigInt(0);
         let i = 6;
         while (i !== 0) {
             t.start();
             const diff = t.stop();
-            tests.push(diff);
-            total += diff;
+            if (i !== 6) total += diff;
             i--;
         }
-        total -= tests.shift()!;
         this.delay = total / BigInt(6);
     }
     /**
@@ -70,7 +67,6 @@ export class Measure {
         t.start();
         await callback();
         const end = t.stop()
-        console.log(this.delay);
         const diff = Number(end - this.delay);
         return simplified ? simplify(diff) : diff;
     }
