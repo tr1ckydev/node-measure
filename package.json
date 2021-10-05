@@ -1,6 +1,6 @@
 {
   "name": "node-measure",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A far better replacement for console.time along with other cool features.",
   "main": "dist/index.js",
   "scripts": {
